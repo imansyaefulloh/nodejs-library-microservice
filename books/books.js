@@ -31,8 +31,8 @@ app.get('/books', (req, res) => {
  * Get single books
  */
 app.get('/books/:id', (req, res) => {
-  const bookId = req.params.id;
-  
+  let bookId = req.params.id;
+
   if (!ObjectId.isValid(bookId)) {
     console.log('invalid ObjectId');
     return res.sendStatus(404);
@@ -48,7 +48,7 @@ app.get('/books/:id', (req, res) => {
     })
     .catch(err => {
       if (err) {
-        console.log('error in catch: ' + err)
+        console.log('error when trying to find book: ' + err)
       }
     });
 });
@@ -74,5 +74,29 @@ app.post('/books', (req, res) => {
 
   res.send('create new book success');
 });
+
+/**
+ * Delete Book
+ */
+app.delete('/books/:id', (req, res) => {
+  let bookId = req.params.id;
+  console.log(bookId);
+
+  if (!ObjectId.isValid(bookId)) {
+    console.log('invalid ObjectId');
+    return res.sendStatus(404);
+  }
+
+  Book.findByIdAndRemove(bookId)
+    .then(() => {
+      res.send(`book with _id: ${bookId} book deleted`);
+    })
+    .catch(err => {
+      if (err) {
+        console.log('error when trying to remove book: ' + err)
+      }
+    })
+});
+
 
 app.listen(3000, () => console.log('server running at http://localhost:3000'));
