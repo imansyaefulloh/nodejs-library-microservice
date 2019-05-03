@@ -24,7 +24,11 @@ app.get('/', (req, res) => {
 app.get('/books', (req, res) => {
   Book.find({})
     .then(books => res.json(books))
-    .catch(err => console.log(err));
+    .catch(err => {
+      if (err) {
+        console.log('error when trying to get all books: ' + err)
+      }
+    });
 });
 
 /**
@@ -69,10 +73,8 @@ app.post('/books', (req, res) => {
   let book = new Book(newBook);
 
   book.save()
-    .then(() => console.log('new book created'))
+    .then(() => res.send('create new book success'))
     .catch(err => console.log(err));
-
-  res.send('create new book success');
 });
 
 /**
@@ -88,9 +90,7 @@ app.delete('/books/:id', (req, res) => {
   }
 
   Book.findByIdAndRemove(bookId)
-    .then(() => {
-      res.send(`book with _id: ${bookId} book deleted`);
-    })
+    .then(() => res.send('delete book success'))
     .catch(err => {
       if (err) {
         console.log('error when trying to remove book: ' + err)
@@ -99,4 +99,4 @@ app.delete('/books/:id', (req, res) => {
 });
 
 
-app.listen(3000, () => console.log('server running at http://localhost:3000'));
+app.listen(3000, () => console.log('book service running at http://localhost:3000'));
