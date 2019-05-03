@@ -11,4 +11,11 @@ app.get('/', (req, res) => {
   res.send('This is our main endpoint for books service');
 });
 
+/**
+ * Create a new book
+ */
+app.post('/books', (req, res) => {
+  res.send('This is our main endpoint for books service');
+});
+
 app.listen(3000, () => console.log('server running at http://localhost:3000'));
